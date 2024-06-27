@@ -36,18 +36,37 @@ S - площадьб а - длина основания
 Пример 2: Triangle((200, 200, 100), 10, 6), т.к. сторон у треугольника 3, то его стороны будут - [1, 1, 1]
 Пример 3: Cube((200, 200, 100), 9), т.к. сторон(рёбер) у куба - 12, то его стороны будут - [9, 9, 9, ....., 9] (12)
 Пример 4: Cube((200, 200, 100), 9, 12), т.к. сторон(рёбер) у куба - 12, то его стороны будут - [1, 1, 1, ....., 1]"""
+import math
+
+
 
 class Figure:
-    r, g, b = 0, 0, 0       # черный
+    r, g, b = 0, 0, 0           # черный
+    sides_count = 0
 
-    def __init__(self, __sides, __color, filled):
+    def __init__(self, *sides, color):
         r, g, b = 0, 0, 0
-        self.__sides = [1, 3, 12]
-        self.__color = [r, g, b]
+
+        if self.__isvalid_sides(*sides):
+            self.__sides = sides
+        else: [1] * self.sides_count            # ?????????????
+        self.__color = color
         self.filled = False
 
-    def get_color(self):        # геттер
-        print(self.__color)
+    def get_color(self):        # геттер v
+        return self.__color
+
+    def set_color(self, r, g, b):       # сеттер v
+        if self.__isvalid_color(r, g, b):
+            self.__color = [r, g, b]
+
+
+    def get_sides(self):        # геттер v
+        return self.__sides
+
+    def set_sides(self, *sides):        # сеттер v
+        if self.__isvalid_sides(*sides):
+            self.__sides = sides
 
     def  __is_valid_color(self, r, g, b):
         for i in r, g, b:
@@ -55,16 +74,38 @@ class Figure:
                 print('Недопустимый цвет')
             else: self.i = i
 
-    def set_color(self, r, g, b):       # сеттер
-        self.__color = [r, g, b]
+    def  __is_valid_sides(self, *sides):            # переделать по строкам V
+        return len(sides) == self.sides_count and all(isinstance(side, int) and side > 0 for side in sides)
+
+    def __len__(self):
+        return sum(self.__sides)
+
+
 
 
 
 
 
 class Circle:
+    sides_count = 1
+    def __init__(self, color, sides):
+        super().__init__(color, sides)
+        if self.__isvalid_sides(*sides):
+            self.__sides = sides
+        else:
+            [1] * self.sides_count
+        self.__radius = self.__sides / (math.pi * 2)
+
+    def __is_valid_sides(self, *sides):
+        return len(sides) >= self.sides_count and all(isinstance(sides[0], int) and sides[0] > 0 )  #???????????
+
+    def get_square(self):
+        return self.__radius ** 2 * math.pi
+
     pass
 class Triangle:
+    sides_count = 3
     pass
 class Cube:
+    sides_count = 12
     pass
