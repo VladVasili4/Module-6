@@ -30,8 +30,12 @@ class Figure:
         return list(self.__sides)
 
     def set_sides(self, *new_sides):        # сеттер v
+        print(*new_sides)
         if self.__is_valid_sides(*new_sides):
+            print(f'If YES {self.__is_valid_sides(*new_sides)}')
             self.__sides = new_sides
+        else: print(f'If NO {self.__is_valid_sides(*new_sides)}')
+        print(self.__sides)
 
     def  __is_valid_sides(self, *sides):            # проверили V
         return len(sides) == self.sides_count and all(isinstance(side, int) and side > 0 for side in sides)
@@ -63,18 +67,16 @@ class Triangle(Figure):
     sides_count = 3
     def __init__(self, color, *sides):
         super().__init__(color, sides)
-        try:
-            if self.__is_valid_sides(*sides):
-                self.__sides = sides
-                self.p = sum(self.__sides) / 2
-                self.s = math.sqrt(self.p * (self.p - self.__sides[0]) * (self.p - self.__sides[1])
-                                   * (self.p - self.__sides[2]))
-                self.footing = max(self.__sides)
-                self.__height = 2 * self.s / self.footing
-            else:
-                self.__sides = [1] * self.sides_count
-        except TypeError:
-            print('Недопустимый формат длины сторон')
+
+        if self.__is_valid_sides(*sides):
+            self.__sides = list(sides)
+            self.p = sum(self.__sides) / 2
+            self.s = math.sqrt(self.p * (self.p - self.__sides[0]) * (self.p - self.__sides[1])
+                               * (self.p - self.__sides[2]))
+            self.footing = max(self.__sides)
+            self.__height = 2 * self.s / self.footing
+        else:
+            self.__sides = [1] * self.sides_count
         self.filled = False
     def __is_valid_sides(self, *sides):
         for i in sides:
@@ -86,16 +88,16 @@ class Triangle(Figure):
 
 class Cube(Figure):
     sides_count = 12
-    def __init__(self, color, *sides):
+
+      def __init__(self, color, *sides):
         super().__init__(color, sides)
         if self.__is_valid_sides(*sides):
-                                                                        # !!!!!!!!!!!!!!!!!!!!!!!!
-            self.__sides = [sides[0]] * self.sides_count
-
-            print(f'self.__sides of cube {self.__sides}')
-                                                                        #!!!!!!!!!!!!!!!!!!!!!!!!!!
+            self.sides = [sides[0]] * self.sides_count
+            print(f'self.__sides of cube {self.sides}')
+            self.__sides = self.sides
         else:
             self.__sides = [1] * self.sides_count
+        self.filled = True
     def __is_valid_sides(self, *sides):
         for i in sides:
             return isinstance(i, int) and i > 0 and len(sides) == 1
@@ -103,22 +105,28 @@ class Cube(Figure):
         return self.__sides[0] ** 3
 
 
-circle1 = Circle((200, 200, 100), 10) # (Цвет, стороны)
+# circle1 = Circle((200, 200, 100), 10) # (Цвет, стороны)
 cube1 = Cube((222, 35, 130), 6)
-circle1.set_color(55, 66, 77) # Изменится
-print(circle1.get_color())
-cube1.set_color(300, 70, 15) # Не изменится
+# cube2 = Cube((111, 255, 99), 13)
+# circle1.set_color(55, 66, 77) # Изменится
+# print(circle1.get_color())
+cube1.set_color(255, 70, 15) # Не изменится
 print(cube1.get_color())
 
 # Проверка на изменение сторон:
-cube1.set_sides(5, 3, 12, 4, 5) # Не изменится
-cube1.set_sides(18)
+# cube1.set_sides(5, 3, 12, 4, 5)    # Не изменится
+# print(f'cube1._Cube__is_valid_sides() {cube1._Cube__is_valid_sides()}')
+# cube2.set_sides(12)    # Не изменится
+# print(cube2._Cube__is_valid_sides())
+# print(cube1.get_sides())
+cube1.set_sides(18)         # Должно измениться но..............
+print(f'cube1._Cube__is_valid_sides() {cube1._Cube__is_valid_sides(18)}')
 print(cube1.get_sides())
-circle1.set_sides(15) # Изменится
-print(circle1.get_sides())
+# circle1.set_sides(38) # Изменится
+# print(circle1.get_sides())
 
 # Проверка периметра (круга), это и есть длина:
-print(len(circle1))
+# print(len(circle1))
 
 # Проверка объёма (куба):
 print(cube1.get_volume())
@@ -132,7 +140,9 @@ print(cube1.get_volume())
 # print(circle1.get_square())
 # print(f'Radius = {circle1._Circle__radius}')
 #
-# triangle1 = Triangle((200, 200, 100), 15, 17, 18)
+# triangle1 = Triangle((114, 113, 112), 15, 17, 18)
+# triangle1.set_sides(28, 29, 30) # Изменится
+# print(triangle1.get_sides())
 # triangle2 = Triangle((200, 200, 100), 15, 17)
 #
 # cube1 = Cube((200, 200, 100), 6)
