@@ -10,17 +10,20 @@ class Figure:
         self.__sides = sides
         self.filled = False
 
-    def get_color(self):        # геттер v
+    def get_color(self):
+        # self.set_color(self, self.__color)# геттер v
         return self.__color
 
     def  __is_valid_color(self, r, g, b):
-        self.color_ = [r, g, b]
-        for i in self.color_:
-            return  isinstance(i, int) and (0 <= i < 256)
+        color_ = [r, g, b]
+        for i in color_:
+            self.colored = all(isinstance(i, int) and (0 <= i < 256) for i in color_)
+        return self.colored
 
     def set_color(self, r, g, b):       # сеттер v
         if self.__is_valid_color(r, g, b):
             self.__color = [r, g, b]
+        return self.__color
 
 
     def get_sides(self):        # геттер v
@@ -30,7 +33,7 @@ class Figure:
         if self.__is_valid_sides(*new_sides):
             self.__sides = new_sides
 
-    def  __is_valid_sides(self, *sides):            # переделать по строкам V
+    def  __is_valid_sides(self, *sides):            # проверили V
         return len(sides) == self.sides_count and all(isinstance(side, int) and side > 0 for side in sides)
 
     def __len__(self):
@@ -45,8 +48,6 @@ class Circle(Figure):
         super().__init__(color, sides)
         if self.__is_valid_sides(*sides):
             self.__sides = list(sides)
-            print(f'WWW {self.__sides}')
-            # self.__radius = self.__sides[0] / (math.pi * 2)
         else:
             self.__sides = [1] * self.sides_count
         self.filled = False
@@ -104,13 +105,13 @@ class Cube(Figure):
 
 circle1 = Circle((200, 200, 100), 10) # (Цвет, стороны)
 cube1 = Cube((222, 35, 130), 6)
-circle1.set_color(55, 66, 999) # Изменится
+circle1.set_color(55, 66, 77) # Изменится
 print(circle1.get_color())
 cube1.set_color(300, 70, 15) # Не изменится
 print(cube1.get_color())
 
 # Проверка на изменение сторон:
-# cube1.set_sides(5, 3, 12, 4, 5) # Не изменится
+cube1.set_sides(5, 3, 12, 4, 5) # Не изменится
 cube1.set_sides(18)
 print(cube1.get_sides())
 circle1.set_sides(15) # Изменится
